@@ -83,16 +83,17 @@ class Bucket extends Client {
                     xml.XmlElement ele = node;
                     switch ('${ele.name}') {
                       case "Key":
-                        key = ele.text;
+                        key = ele.value;
                         break;
                       case "LastModified":
-                        lastModifiedUtc = DateTime.parse(ele.text);
+                        lastModifiedUtc =
+                            DateTime.tryParse(ele.value.toString());
                         break;
                       case "ETag":
-                        eTag = ele.text;
+                        eTag = ele.value;
                         break;
                       case "Size":
-                        size = int.parse(ele.text);
+                        size = int.tryParse(ele.value.toString());
                         break;
                     }
                   }
