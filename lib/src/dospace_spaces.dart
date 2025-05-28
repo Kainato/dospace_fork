@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
 
-import 'dospace_client.dart';
 import 'dospace_bucket.dart';
+import 'dospace_client.dart';
 
 class Spaces extends Client {
   Spaces(
@@ -37,14 +37,18 @@ class Spaces extends Client {
     }
   }
 
-  Future<List<String>> listAllBuckets() async {
+  Future<List<String?>> listAllBuckets() async {
     xml.XmlDocument doc = await getUri(Uri.parse(endpointUrl + '/'));
     List<String> res = [];
     for (xml.XmlElement root in doc.findElements('ListAllMyBucketsResult')) {
       for (xml.XmlElement buckets in root.findElements('Buckets')) {
         for (xml.XmlElement bucket in buckets.findElements('Bucket')) {
           for (xml.XmlElement name in bucket.findElements('Name')) {
-            res.add(name.text);
+            if (name.value == null) {
+              throw Exception("Bucket name is null!");
+            } else {
+              res.add(name.value!);
+            }
           }
         }
       }

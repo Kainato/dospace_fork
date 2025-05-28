@@ -29,7 +29,8 @@ Future<void> main() async {
   });
 
   test("Bucket is in Spaces", () async {
-    List<String> buckets = await spaces!.listAllBuckets();
+    List<String> buckets =
+        (await spaces!.listAllBuckets()).whereType<String>().toList();
     expect(buckets, contains(cfg.get("Bucket", "bucket")));
   });
 

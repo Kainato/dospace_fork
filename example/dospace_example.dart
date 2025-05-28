@@ -16,7 +16,19 @@ main() async {
     accessKey: accessKey,
     secretKey: secretKey,
   );
-  for (String name in await spaces.listAllBuckets()) {
+  List<String> bucketsNotNullable = [];
+
+  await spaces.listAllBuckets().then((List<String?> buckets) {
+    for (String? bucket in buckets) {
+      if (bucket != null) {
+        bucketsNotNullable.add(bucket);
+      } else {
+        throw Exception('Some of the buckets are null!');
+      }
+    }
+  });
+
+  for (String name in bucketsNotNullable) {
     print('bucket: ${name}');
     dospace.Bucket bucket = spaces.bucket(name);
     await for (dospace.BucketContent content
